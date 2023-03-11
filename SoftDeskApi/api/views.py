@@ -70,7 +70,7 @@ class ProjectDetailView(APIView):
         return Response('Projet supprimé avec succès.', status=status.HTTP_204_NO_CONTENT)
     
 class ContributorListView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, ContributorsPermissions]
 
     def get(self, request, project_id):
         project = get_object_or_404(Projects, id=project_id)
@@ -100,7 +100,7 @@ class ContributorListView(APIView):
                 return Response("L'Utilisateur n'existe pas.", status=status.HTTP_400_BAD_REQUEST)
             
 class DeleteContributorView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, ContributorsPermissions]
 
     def delete(self, request, project_id, user_id):
         get_object_or_404(Projects, id=project_id)
@@ -114,7 +114,7 @@ class DeleteContributorView(APIView):
 
 
 class IssueListView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IssuesPermissions]
 
     def get(self, request, project_id):
         project = get_object_or_404(Projects, id=project_id)
@@ -145,7 +145,7 @@ class IssueListView(APIView):
             )
         
 class IssueDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IssuesPermissions]
 
     def get(self, request, project_id, issue_id):
         issue = get_object_or_404(Issues, id=issue_id)
@@ -181,7 +181,7 @@ class IssueDetailView(APIView):
     
 
 class CommentListView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, CommentsPermissions]
 
     def get(self, request, project_id, issue_id):
         get_object_or_404(Projects, id=project_id)
@@ -208,7 +208,7 @@ class CommentListView(APIView):
     
 
 class CommentDetailView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, CommentsPermissions]
 
     def get(self, request, project_id, issue_id, comment_id):
         comment = get_object_or_404(Comments, id=comment_id)
