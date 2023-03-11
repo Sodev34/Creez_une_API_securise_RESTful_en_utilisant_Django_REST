@@ -22,13 +22,7 @@ class IssuesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Issues
-        fields = (
-            "title",
-            "desc",
-            "tag",
-            "priority",
-            "status",
-            "assignee")
+        fields = "__all__"
         read_only__fields = ('project', 'author', 'created_time', 'id')
 
 
@@ -36,5 +30,5 @@ class CommentsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comments
-        fields = 'description'
+        fields = "__all__"
         read_only__fields = ('author', 'issue', 'created_time', 'id')
