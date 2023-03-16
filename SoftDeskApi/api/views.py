@@ -22,13 +22,16 @@ from api.serializers import (
     ContributorsSerializer,
 )
 
+
 class ProjectListView(APIView):
-    permission_classes = [IsAuthenticated, ProjectsPermissions]
+    permission_classes = [IsAuthenticated , ProjectsPermissions]
 
     def get(self, request):
         projects = Projects.objects.filter(contributors__user=request.user)
+        print(projects)
 
         serializer = ProjectsSerializer(projects, many=True)
+        print(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):

@@ -1,10 +1,10 @@
 from django.db import models
 from django.conf import settings
 
-PERMISSIONS_CHOICES = (
-        ("author", "author"),
-        ("contributor", "contributor"),
-    )
+#PERMISSIONS_CHOICES = (
+ #       ("author", "author"),
+  #      ("contributor", "contributor"),
+   # )
 
 class Projects(models.Model):
     title = models.CharField(max_length=120)
