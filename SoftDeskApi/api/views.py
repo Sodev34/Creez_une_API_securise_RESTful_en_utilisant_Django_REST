@@ -3,7 +3,6 @@ from rest_framework import status
 from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-
 from rest_framework.views import APIView
 
 from api.models import Projects, Contributors, Issues, Comments
@@ -24,28 +23,27 @@ from api.serializers import (
 
 
 class ProjectListView(APIView):
-    permission_classes = [IsAuthenticated , ProjectsPermissions]
+    permission_classes = [IsAuthenticated, ProjectsPermissions]
 
     def get(self, request):
         projects = Projects.objects.filter(contributors__user=request.user)
-        print(projects)
-
         serializer = ProjectsSerializer(projects, many=True)
-        print(serializer)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
         data = request.data.copy()
-        data['author'] = request.user.id
+        data["author"] = request.user.id
 
         serializer = ProjectsSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             project = serializer.save()
-            Contributors.objects.create(user=request.user, project=project, role='author')
+            Contributors.objects.create(
+                user=request.user, project=project, role="author"
+            )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 class ProjectDetailView(APIView):
     permission_classes = [IsAuthenticated, ProjectsPermissions]
@@ -58,7 +56,7 @@ class ProjectDetailView(APIView):
     def put(self, request, project_id):
         project = get_object_or_404(Projects, id=project_id)
         data = request.data.copy()
-        data['author'] = project.author.id
+        data["author"] = project.author.id
 
         serializer = ProjectsSerializer(project, data=data)
         if serializer.is_valid(raise_exception=True):
@@ -70,8 +68,11 @@ class ProjectDetailView(APIView):
     def delete(self, request, project_id):
         project = get_object_or_404(Projects, id=project_id)
         project.delete()
-        return Response('Projet supprimé avec succès.', status=status.HTTP_204_NO_CONTENT)
-    
+        return Response(
+            "Projet supprimé avec succès.", status=status.HTTP_204_NO_CONTENT
+        )
+
+
 class ContributorListView(APIView):
     permission_classes = [IsAuthenticated, ContributorsPermissions]
 
@@ -84,15 +85,18 @@ class ContributorListView(APIView):
     def post(self, request, project_id):
         project = get_object_or_404(Projects, id=project_id)
         data = request.data.copy()
-        data['project'] = project.id
-        #print(data)
+        data["project"] = project.id
+        # print(data)
 
         try:
-            Contributors.objects.get(user=data['user'], project=project.id)
-            return Response('Cet utilisateur a déjà été ajouté en tant que contributeur à ce projet.', status=status.HTTP_400_BAD_REQUEST)
+            Contributors.objects.get(user=data["user"], project=project.id)
+            return Response(
+                "Cet utilisateur a déjà été ajouté en tant que contributeur à ce projet.",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         except Contributors.DoesNotExist:
             try:
-                User.objects.get(id=data['user'])
+                User.objects.get(id=data["user"])
                 serializer = ContributorsSerializer(data=data)
                 if serializer.is_valid(raise_exception=True):
                     serializer.save()
@@ -100,8 +104,11 @@ class ContributorListView(APIView):
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
             except User.DoesNotExist:
-                return Response("L'Utilisateur n'existe pas.", status=status.HTTP_400_BAD_REQUEST)
-            
+                return Response(
+                    "L'Utilisateur n'existe pas.", status=status.HTTP_400_BAD_REQUEST
+                )
+
+
 class DeleteContributorView(APIView):
     permission_classes = [IsAuthenticated, ContributorsPermissions]
 
@@ -109,11 +116,16 @@ class DeleteContributorView(APIView):
         get_object_or_404(Projects, id=project_id)
         contributor = get_object_or_404(Contributors, id=user_id)
 
-        if contributor.role == 'author':
-            return Response("L'auteur du projet ne peut pas être supprimé", status=status.HTTP_400_BAD_REQUEST)
+        if contributor.role == "author":
+            return Response(
+                "L'auteur du projet ne peut pas être supprimé",
+                status=status.HTTP_400_BAD_REQUEST,
+            )
         else:
             contributor.delete()
-            return Response("Contributeur supprimé avec succès.", status=status.HTTP_204_NO_CONTENT)
+            return Response(
+                "Contributeur supprimé avec succès.", status=status.HTTP_204_NO_CONTENT
+            )
 
 
 class IssueListView(APIView):
@@ -124,29 +136,28 @@ class IssueListView(APIView):
         issues = Issues.objects.filter(project=project)
         serializer = IssuesSerializer(issues, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-        
-    
+
     def post(self, request, project_id):
         project = get_object_or_404(Projects, id=project_id)
         data = request.data.copy()
-        data['project'] = project.id
-        data['author'] = request.user.id
-        #print(data)
+        data["project"] = project.id
+        data["author"] = request.user.id
+        # print(data)
 
         try:
-            Contributors.objects.get(id=data['assignee'], project=project.id)
+            Contributors.objects.get(id=data["assignee"], project=project.id)
             serializer = IssuesSerializer(data=data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
         except Contributors.DoesNotExist:
             return Response(
-                "Cet utilisateur n'existe pas.",
-                status=status.HTTP_400_BAD_REQUEST
+                "Cet utilisateur n'existe pas.", status=status.HTTP_400_BAD_REQUEST
             )
-        
+
+
 class IssueDetailView(APIView):
     permission_classes = [IsAuthenticated, IssuesPermissions]
 
@@ -160,11 +171,11 @@ class IssueDetailView(APIView):
         issue = get_object_or_404(Issues, id=issue_id)
 
         data = request.data.copy()
-        data['project'] = project.id
-        data['author'] = issue.author.id
+        data["project"] = project.id
+        data["author"] = issue.author.id
 
         try:
-            Contributors.objects.get(id=data['assignee'], project=project.id)
+            Contributors.objects.get(id=data["assignee"], project=project.id)
             serializer = IssuesSerializer(issue, data=data)
             if serializer.is_valid(raise_exception=True):
                 serializer.save()
@@ -173,15 +184,16 @@ class IssueDetailView(APIView):
 
         except Contributors.DoesNotExist:
             return Response(
-                "Cet utilisateur n'existe pas.",
-                status=status.HTTP_400_BAD_REQUEST
+                "Cet utilisateur n'existe pas.", status=status.HTTP_400_BAD_REQUEST
             )
 
     def delete(self, request, project_id, issue_id):
         issue = get_object_or_404(Issues, id=issue_id)
         issue.delete()
-        return Response("Problème supprimé avec succès.", status=status.HTTP_204_NO_CONTENT)
-    
+        return Response(
+            "Problème supprimé avec succès.", status=status.HTTP_204_NO_CONTENT
+        )
+
 
 class CommentListView(APIView):
     permission_classes = [IsAuthenticated, CommentsPermissions]
@@ -199,16 +211,16 @@ class CommentListView(APIView):
         issue = get_object_or_404(Issues, id=issue_id)
 
         data = request.data.copy()
-        data['issue'] = issue.id
-        data['author'] = request.user.id
-        #print(data)
+        data["issue"] = issue.id
+        data["author"] = request.user.id
+        # print(data)
 
         serializer = CommentsSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 class CommentDetailView(APIView):
     permission_classes = [IsAuthenticated, CommentsPermissions]
@@ -216,6 +228,7 @@ class CommentDetailView(APIView):
     def get(self, request, project_id, issue_id, comment_id):
         comment = get_object_or_404(Comments, id=comment_id)
         serializer = CommentsSerializer(comment)
+        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request, project_id, issue_id, comment_id):
@@ -223,8 +236,8 @@ class CommentDetailView(APIView):
         comment = get_object_or_404(Comments, id=comment_id)
 
         data = request.data.copy()
-        data['issue'] = issue.id
-        data['author'] = comment.author.id
+        data["issue"] = issue.id
+        data["author"] = comment.author.id
 
         serializer = CommentsSerializer(comment, data=data)
         if serializer.is_valid(raise_exception=True):
@@ -235,4 +248,6 @@ class CommentDetailView(APIView):
     def delete(self, request, project_id, issue_id, comment_id):
         comment = get_object_or_404(Comments, id=comment_id)
         comment.delete()
-        return Response('Commentaire supprimé avec succès.', status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            "Commentaire supprimé avec succès.", status=status.HTTP_204_NO_CONTENT
+        )

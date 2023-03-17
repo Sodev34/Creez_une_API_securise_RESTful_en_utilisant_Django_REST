@@ -53,9 +53,7 @@ class CommentsPermissions(permissions.BasePermission):
             comment = Comments.objects.get(id=comment_id)
             if request.method in permissions.SAFE_METHODS:
                 return Projects.objects.filter(
-                    contributors__user=request.user,
-                    id=project_id,
-                    issues__comments=comment_id,
+                    contributors__user=request.user, id=project_id
                 ).exists()
             return request.user == comment.author
         except Comments.DoesNotExist:
