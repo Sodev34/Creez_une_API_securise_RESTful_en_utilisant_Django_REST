@@ -7,9 +7,10 @@ class ProjectsPermissions(permissions.BasePermission):
     def has_permission(self, request, view):
         try:
             project_id = view.kwargs.get("project_id")
+            project = Projects.objects.get(id=project_id)
             if request.method in permissions.SAFE_METHODS:
-                return Projects.objects.filter(contributors__user=request.user)
-            return request.user == project_id.author
+                return Projects.objects.filter(contributors__user=request.user).exists()
+            return request.user == project.author
         except (KeyError, Projects.DoesNotExist):
             return True
 

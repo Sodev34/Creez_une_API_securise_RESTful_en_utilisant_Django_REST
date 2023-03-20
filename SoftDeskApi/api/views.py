@@ -33,6 +33,7 @@ class ProjectListView(APIView):
     def post(self, request):
         data = request.data.copy()
         data["author"] = request.user.id
+        #print(data)
 
         serializer = ProjectsSerializer(data=data)
         if serializer.is_valid(raise_exception=True):
