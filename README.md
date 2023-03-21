@@ -46,7 +46,7 @@ ____
 
 ### 7. Naviguer vers l'API :
 
-- Ouvrir un navigateur, et aller à l'adresse du site : http://127.0.0.1:8000/.
+- Ouvrir un navigateur, et aller à l'adresse du site : http://127.0.0.1:8000/admin/.
 
 - Il est également possible de naviguer dans l'API via la plateforme [Postman] </br> 
     (https://www.postman.com/). 
