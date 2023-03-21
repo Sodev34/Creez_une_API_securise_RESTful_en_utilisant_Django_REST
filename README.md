@@ -1,4 +1,4 @@
-# Créez une API sécurisée RESTful avec Django REST
+# Créez une API sécurisée RESTful en utilisant Django REST
 
 Projet 10 / Créez une API sécurisée RESTful en utilisant Django REST. </br> 
 
