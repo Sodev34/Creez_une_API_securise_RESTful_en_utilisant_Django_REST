@@ -46,13 +46,15 @@ ____
 
 ### 7. Naviguer vers l'API :
 
-    - Ouvrir un navigateur, et aller à l'adresse du site : http://127.0.0.1:8000/.
+- Ouvrir un navigateur, et aller à l'adresse du site : http://127.0.0.1:8000/.
 
-    -  Il est également possible de naviguer dans l'API via la plateforme [Postman](https://www.postman.com/)
-
+- Il est également possible de naviguer dans l'API via la plateforme [Postman] </br> 
+    (https://www.postman.com/). 
     
-    Nom d'utilisateur : UTILISATEURAPI1
-    Mot de passe : API1UTILISATEUR
+
+
+Nom d'utilisateur : UTILISATEURAPI1
+Mot de passe : API1UTILISATEUR
 
 
   
