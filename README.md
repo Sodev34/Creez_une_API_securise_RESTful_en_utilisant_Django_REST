@@ -11,7 +11,7 @@ d'ajouter des utilisateurs à des projets spécifiques, de créer des
 problèmes au sein des projets et d'attribuer des libellés à ces problèmes 
 en fonction de leurs priorités, de balises.
 
-Vous retrouverez l'ensemble des informations concerant l'API dans la [documentation Postman de l'API](https://documenter.getpostman.com/view/24417977/2s93K1oemR#7653e7f8-1bdd-4576-bcb7-bce741831aad)
+Vous retrouverez l'ensemble des informations concerant l'API dans la [documentation Postman de l'API](https://documenter.getpostman.com/view/24417977/2s93K1oemR#7653e7f8-1bdd-4576-bcb7-bce741831aad).
 
 ____
 ## Lancer le programme sous Python 3.9.12 :
