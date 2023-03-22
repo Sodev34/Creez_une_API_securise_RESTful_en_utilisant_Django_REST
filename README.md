@@ -54,7 +54,9 @@ ____
   Nom d'utilisateur : UTILISATEURAPI1 </br>
   Mot de passe : API1UTILISATEUR
 
+### 8. Documentation de l'API :
 
+Lien pour la documentation de l'API : https://documenter.getpostman.com/view/24417977/2s93K1oemR#7653e7f8-1bdd-4576-bcb7-bce741831aad
   
 
 
